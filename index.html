@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Salin Kata</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+:root{
+  --outer:#E4E8FA; --screen:#F7F7FC; --card:#FFFFFF; --ink:#1B1F3B; --muted:#6A6F93;
+  --indigo:#4B4DED; --indigo-ink:#FFFFFF; --sun:#FFC83D; --coral:#FF5A6E; --mint:#17A673; --line:#DCDFF3;
+  --ok-bg:#D9F5E8; --bad-bg:#FFE0E4;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --outer:#0B0C1A; --screen:#14162B; --card:#1F2243; --ink:#F1F2FF; --muted:#9A9FC9;
+    --indigo:#7A7CFF; --indigo-ink:#0F1030; --sun:#FFD04D; --coral:#FF7386; --mint:#3DDC97; --line:#2E3260;
+    --ok-bg:#16402F; --bad-bg:#4A1E2A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --outer:#0B0C1A; --screen:#14162B; --card:#1F2243; --ink:#F1F2FF; --muted:#9A9FC9;
+  --indigo:#7A7CFF; --indigo-ink:#0F1030; --sun:#FFD04D; --coral:#FF7386; --mint:#3DDC97; --line:#2E3260;
+  --ok-bg:#16402F; --bad-bg:#4A1E2A; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+body{margin:0;height:100%;background:var(--outer);color:var(--ink);font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;justify-content:center;align-items:center}
+.phone{width:100%;max-width:430px;height:100%;max-height:880px;background:var(--screen);position:relative;overflow:hidden;display:flex;flex-direction:column}
+@media (min-width:600px){.phone{height:min(100%,860px);border-radius:44px;border:10px solid var(--ink);box-shadow:0 30px 80px rgba(20,22,60,.35)}}
+h1,h2,.num{font-family:"Fredoka","Trebuchet MS",system-ui,sans-serif;margin:0}
+.screen{display:none;flex:1;flex-direction:column;padding:22px 20px 20px;min-height:0}
+.screen.on{display:flex}
+button{font:inherit;cursor:pointer;border:0}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+/* Start */
+.hero{flex:1;display:flex;flex-direction:column;justify-content:center;gap:22px}
+.logo{font-family:"Fredoka",sans-serif;font-weight:700;font-size:92px;line-height:.9;color:var(--indigo);letter-spacing:-3px}
+.logo small{display:block;font-size:34px;letter-spacing:0;color:var(--ink);margin-top:6px}
+.lead{font-size:17px;line-height:1.5;color:var(--muted);max-width:30ch;margin:0}
+.keys{display:flex;gap:8px;flex-wrap:wrap}
+.key{background:var(--card);border:2px solid var(--line);border-bottom-width:5px;border-radius:10px;padding:6px 12px;font-family:"Fredoka",sans-serif;font-weight:500;font-size:18px}
+.key:nth-child(3n+1){transform:rotate(-3deg)}.key:nth-child(3n){transform:rotate(2deg)}
+.best{font-weight:800;color:var(--muted);font-size:15px}
+.best b{color:var(--mint)}
+.btn{background:var(--indigo);color:var(--indigo-ink);border-radius:18px;padding:17px 20px;font-family:"Fredoka",sans-serif;font-weight:700;font-size:21px;box-shadow:0 5px 0 rgba(0,0,0,.22);transition:transform .08s,box-shadow .08s;width:100%}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.22)}
+.btn.sun{background:var(--sun);color:#1B1F3B}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border:2px solid var(--line)}
+
+/* Play */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.timer{font-family:"Fredoka",sans-serif;font-weight:700;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.timer span{font-size:18px;color:var(--muted);margin-left:2px}
+.count{font-weight:800;color:var(--muted);font-size:15px}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:16px}
+.bar i{display:block;height:100%;width:0;background:var(--mint);border-radius:99px;transition:width .15s}
+.card{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:16px;flex:0 1 auto;overflow:auto;max-height:42%}
+.words{display:flex;flex-wrap:wrap;gap:6px 7px;font-size:20px;font-weight:700;line-height:1.2}
+.w{padding:3px 7px;border-radius:8px;color:var(--muted)}
+.w.ok{background:var(--ok-bg);color:var(--mint)}
+.w.bad{background:var(--bad-bg);color:var(--coral);text-decoration:line-through}
+.w.cur{background:var(--sun);color:#1B1F3B}
+.w.cur.off{background:var(--bad-bg);color:var(--coral)}
+.field{margin-top:14px;flex:1;display:flex;flex-direction:column;min-height:0}
+label{font-weight:800;font-size:14px;color:var(--muted);margin-bottom:6px}
+textarea{flex:1;min-height:90px;resize:none;border:2px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);font:700 19px/1.4 "Nunito",system-ui,sans-serif;padding:14px}
+textarea:focus{border-color:var(--indigo)}
+.warn{display:none;margin:12px 0 0;background:var(--sun);color:#1B1F3B;border-radius:14px;padding:12px 14px;font-weight:800;font-size:15px;line-height:1.35}
+.warn.on{display:block}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+.send{margin-top:14px}
+.row{display:flex;gap:10px;margin-top:14px}
+.row .btn{width:auto}
+.row .send{flex:2;margin-top:0}
+.row .cancel{flex:1}
+
+/* Result */
+.res{flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;text-align:center}
+.res h2{font-size:34px}
+.big{font-family:"Fredoka",sans-serif;font-weight:700;font-size:96px;line-height:1;color:var(--indigo);font-variant-numeric:tabular-nums}
+.big span{font-size:30px;color:var(--ink)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px}
+.stat b{display:block;font-family:"Fredoka",sans-serif;font-size:30px}
+.stat em{font-style:normal;color:var(--muted);font-weight:800;font-size:14px}
+.badge{display:inline-block;align-self:center;background:var(--mint);color:#fff;border-radius:99px;padding:6px 16px;font-weight:800}
+.badge.rec{background:var(--sun);color:#1B1F3B}
+.acts{display:flex;flex-direction:column;gap:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="phone">
+
+  <section class="screen on" id="s-start">
+    <div class="hero">
+      <div class="logo">Salin<small>20 kata, secepat mungkin</small></div>
+      <p class="lead">Salin 20 kata acak ke kotak ketik, lalu tekan Kirim. Waktumu dihitung sejak tombol Mulai ditekan.</p>
+      <div class="keys" aria-hidden="true"><span class="key">k</span><span class="key">a</span><span class="key">t</span><span class="key">a</span><span class="key">20</span></div>
+      <div class="best" id="best"></div>
+    </div>
+    <button class="btn" id="start">Mulai</button>
+  </section>
+
+  <section class="screen" id="s-play">
+    <div class="top">
+      <div class="timer"><b id="time">0.0</b><span>detik</span></div>
+      <div class="count" id="count">0 / 20 kata</div>
+    </div>
+    <div class="bar"><i id="prog"></i></div>
+    <div class="card"><div class="words" id="words" aria-label="Teks yang harus disalin"></div></div>
+    <div class="field">
+      <label for="inp">Ketik di sini</label>
+      <textarea id="inp" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Salin kata-kata di atas…"></textarea>
+    </div>
+    <div class="warn" id="warn" role="alert"></div>
+    <div class="row">
+      <button class="btn ghost cancel" id="cancel">Batal</button>
+      <button class="btn sun send" id="send">Kirim</button>
+    </div>
+  </section>
+
+  <section class="screen" id="s-result">
+    <div class="res">
+      <h2 id="title">Selesai!</h2>
+      <span class="badge rec" id="rec" hidden>Rekor baru!</span>
+      <div class="big"><span id="r-time">0.0</span><span> detik</span></div>
+      <div class="stats">
+        <div class="stat"><b id="r-wpm">0</b><em>kata per menit</em></div>
+        <div class="stat"><b id="r-acc">0%</b><em>kata benar</em></div>
+      </div>
+    </div>
+    <div class="acts">
+      <button class="btn" id="again">Main lagi</button>
+      <button class="btn ghost" id="home">Menu utama</button>
+    </div>
+  </section>
+
+</main>
+<script src="app.min.js"></script>
+</body>
+</html>
