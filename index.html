@@ -28,10 +28,10 @@
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
 body{margin:0;height:100%;background:var(--outer);color:var(--ink);font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;justify-content:center;align-items:center}
-.phone{width:100%;max-width:430px;height:100%;max-height:880px;background:var(--screen);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.phone{width:100%;max-width:430px;height:100%;height:100dvh;max-height:880px;background:var(--screen);position:relative;overflow:hidden;display:flex;flex-direction:column}
 @media (min-width:600px){.phone{height:min(100%,860px);border-radius:44px;border:10px solid var(--ink);box-shadow:0 30px 80px rgba(20,22,60,.35)}}
 h1,h2,.num{font-family:"Fredoka","Trebuchet MS",system-ui,sans-serif;margin:0}
-.screen{display:none;flex:1;flex-direction:column;padding:22px 20px 20px;min-height:0}
+.screen{display:none;flex:1;flex-direction:column;padding:18px 18px 16px;min-height:0;overflow-y:auto}
 .screen.on{display:flex}
 button{font:inherit;cursor:pointer;border:0}
 button:focus-visible,textarea:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
@@ -56,26 +56,26 @@ button:focus-visible,textarea:focus-visible{outline:3px solid var(--sun);outline
 .timer{font-family:"Fredoka",sans-serif;font-weight:700;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
 .timer span{font-size:18px;color:var(--muted);margin-left:2px}
 .count{font-weight:800;color:var(--muted);font-size:15px}
-.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:16px}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:12px}
 .bar i{display:block;height:100%;width:0;background:var(--mint);border-radius:99px;transition:width .15s}
-.card{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:16px;flex:0 1 auto;overflow:auto;max-height:42%}
-.words{display:flex;flex-wrap:wrap;gap:6px 7px;font-size:20px;font-weight:700;line-height:1.2}
+.card{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:12px;flex:none}
+.words{display:flex;flex-wrap:wrap;gap:5px 6px;font-size:18px;font-weight:700;line-height:1.2}
 .w{padding:3px 7px;border-radius:8px;color:var(--muted)}
 .w.ok{background:var(--ok-bg);color:var(--mint)}
 .w.bad{background:var(--bad-bg);color:var(--coral);text-decoration:line-through}
 .w.cur{background:var(--sun);color:#1B1F3B}
 .w.cur.off{background:var(--bad-bg);color:var(--coral)}
-.field{margin-top:14px;flex:1;display:flex;flex-direction:column;min-height:0;max-height:17% }
+.field{margin-top:10px;flex:none;display:flex;flex-direction:column}
 label{font-weight:800;font-size:14px;color:var(--muted);margin-bottom:6px}
-textarea{flex:1;min-height:90px;resize:none;border:2px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);font:700 19px/1.4 "Nunito",system-ui,sans-serif;padding:14px}
+textarea{flex:none;height:64px;resize:none;border:2px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);font:700 18px/1.3 "Nunito",system-ui,sans-serif;padding:10px 12px}
 textarea:focus{border-color:var(--indigo)}
 .warn{display:none;margin:12px 0 0;background:var(--sun);color:#1B1F3B;border-radius:14px;padding:12px 14px;font-weight:800;font-size:15px;line-height:1.35}
 .warn.on{display:block}
 .shake{animation:shake .4s}
 @keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
 .send{margin-top:14px}
-.row{display:flex;gap:10px;margin-top:14px}
-.row .btn{width:auto}
+.row{display:flex;gap:10px;margin-top:10px}
+.row .btn{width:auto;padding:13px 16px;font-size:19px}
 .row .send{flex:2;margin-top:0}
 .row .cancel{flex:1}
 
@@ -100,7 +100,7 @@ textarea:focus{border-color:var(--indigo)}
   <section class="screen on" id="s-start">
     <div class="hero">
       <div class="logo">Salin<small>10 kata, secepat mungkin</small></div>
-      <p class="lead">Salin 10 kata acak ke kotak ketik, lalu tekan Kirim. Waktumu dihitung sejak tombol Mulai ditekan.</p>
+      <p class="lead">Salin 10 kata acak ke kotak ketik, lalu tekan Kirim. Waktumu mulai dihitung sejak kamu mengetik huruf pertama.</p>
       <div class="keys" aria-hidden="true"><span class="key">k</span><span class="key">a</span><span class="key">t</span><span class="key">a</span><span class="key">10</span></div>
       <div class="best" id="best"></div>
     </div>
@@ -142,6 +142,89 @@ textarea:focus{border-color:var(--indigo)}
   </section>
 
 </main>
-<script src="app.min.js"></script>
+<script>
+const WORDS = ("rumah buku meja kursi jalan pagi malam hujan angin api air tanah langit bintang bulan matahari sungai gunung laut pantai pohon daun bunga buah nasi roti susu kopi teh gula garam sepeda motor mobil kereta kapal pesawat sekolah kantor pasar kebun taman kota desa teman keluarga ibu ayah kakak adik kucing anjing burung ikan kuda sapi ayam bebek senang sedih marah takut berani cepat lambat besar kecil tinggi rendah panjang pendek baru lama dingin panas manis asam pahit merah biru hijau kuning putih hitam jendela pintu lampu cermin gelas piring sendok pisau tas topi sepatu baju celana cerita lagu puisi gambar warna angka huruf kata").split(" ");
+const TOTAL = 10;
+const $ = id => document.getElementById(id);
+let target = [], t0 = 0, timer = null, playing = false, started = false;
+
+function show(id){ document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === id)); }
+function getBest(){ try { const v = parseFloat(localStorage.getItem("salin20-best")); return isNaN(v) ? null : v; } catch(e){ return null; } }
+function setBest(v){ try { localStorage.setItem("salin20-best", String(v)); } catch(e){} }
+function renderBest(){ const b = getBest(); $("best").innerHTML = b ? "Waktu terbaikmu: <b>" + b.toFixed(1) + " detik</b>" : "Belum ada rekor. Jadilah yang pertama!"; }
+
+function pick(){
+  const pool = WORDS.slice();
+  for (let i = pool.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  return pool.slice(0, TOTAL);
+}
+function typedWords(){ const v = $("inp").value; const arr = v.trim() ? v.trim().split(/\s+/) : []; return { arr, endsSpace: /\s$/.test(v) }; }
+
+function render(){
+  const { arr, endsSpace } = typedWords();
+  const curIdx = endsSpace ? arr.length : arr.length - 1;
+  $("words").innerHTML = target.map((w, i) => {
+    let cls = "w";
+    if (i < arr.length && (i < curIdx || endsSpace)) cls += arr[i] === w ? " ok" : " bad";
+    else if (i === curIdx){
+      cls += " cur";
+      if (arr[i] !== undefined && !w.startsWith(arr[i])) cls += " off";
+    }
+    return '<span class="' + cls + '">' + w + "</span>";
+  }).join("");
+  const done = Math.min(arr.length, TOTAL);
+  $("count").textContent = done + " / " + TOTAL + " kata";
+  $("prog").style.width = (done / TOTAL * 100) + "%";
+  $("warn").classList.remove("on");
+}
+
+function tick(){ $("time").textContent = ((performance.now() - t0) / 1000).toFixed(1); }
+
+function startGame(){
+  target = pick(); $("inp").value = ""; playing = true;
+  show("s-play"); render();
+  $("inp").focus();
+  started = false; clearInterval(timer); $("time").textContent = "0.0";
+}
+
+function send(){
+  if (!playing) return;
+  const { arr } = typedWords();
+  if (arr.length < TOTAL){
+    const w = $("warn");
+    w.textContent = "Belum selesai! Kamu baru menyalin " + arr.length + " dari " + TOTAL + " kata. Lanjutkan dulu, ya.";
+    w.classList.add("on");
+    w.classList.remove("shake"); void w.offsetWidth; w.classList.add("shake");
+    $("inp").focus();
+    return;
+  }
+  const secs = (performance.now() - t0) / 1000;
+  playing = false; clearInterval(timer);
+  const correct = target.reduce((n, w, i) => n + (arr[i] === w ? 1 : 0), 0);
+  const wpm = Math.round(correct / (secs / 60));
+  const acc = Math.round(correct / TOTAL * 100);
+  const best = getBest();
+  const isRec = correct === TOTAL && (best === null || secs < best);
+  if (isRec) setBest(secs);
+  $("r-time").textContent = secs.toFixed(1);
+  $("r-wpm").textContent = wpm;
+  $("r-acc").textContent = acc + "%";
+  $("rec").hidden = !isRec;
+  $("title").textContent = acc < 70 ? "Hati-hati, banyak yang salah" : wpm >= 60 ? "Kilat!" : wpm >= 40 ? "Cepat sekali!" : wpm >= 25 ? "Lumayan!" : "Terus berlatih!";
+  show("s-result");
+}
+
+$("start").onclick = startGame;
+$("again").onclick = startGame;
+$("home").onclick = () => { renderBest(); show("s-start"); };
+$("send").onclick = send;
+$("cancel").onclick = () => { playing = false; clearInterval(timer); renderBest(); show("s-start"); };
+$("inp").addEventListener("input", () => {
+  if (playing && !started && $("inp").value.length > 0){ started = true; t0 = performance.now(); tick(); timer = setInterval(tick, 100); }
+  render();
+});
+$("inp").addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); send(); } });
+renderBest();
+</script>
 </body>
 </html>
